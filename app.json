@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "tp3-ibank-auth",
+    "scheme": "ibanktp",
     "slug": "tp3-ibank-auth",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,6 +20,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
