@@ -79,7 +79,9 @@ export default function AuthLayout({
       <View style={styles.header}>
         {showBack && navigation.canGoBack() ? (
           <Pressable
-            onPress={navigation.goBack}
+            onPress={() => {
+              if (navigation.canGoBack()) navigation.goBack();
+            }}
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="Volver"

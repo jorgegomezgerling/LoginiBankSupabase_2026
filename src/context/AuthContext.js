@@ -12,6 +12,7 @@ import { supabase } from "../lib/supabase";
 import { parseAuthUrl } from "../utils/parseAuthUrl";
 
 const RECOVERY_KEY = "ibank:recovery-pending";
+const HANDLED_LINK_KEY = "ibank:last-auth-link";
 const EXPIRED_CONFIRM =
   "El enlace de confirmación venció o no es válido. Iniciá sesión para pedir uno nuevo.";
 
@@ -72,6 +73,13 @@ export function AuthProvider({ children }) {
 
   const handleAuthUrl = async (incomingUrl) => {
     const params = parseAuthUrl(incomingUrl);
+    // Expo Go re-entrega el último link al recargar: no procesar dos veces el mismo
+    const linkId = params.access_token
+      ? `${params.type}:${params.expires_at}`
+      : incomingUrl;
+    if ((await AsyncStorage.getItem(HANDLED_LINK_KEY)) === linkId) return;
+    await AsyncStorage.setItem(HANDLED_LINK_KEY, linkId);
+
     const isReset =
       incomingUrl.includes("reset-password") || params.type === "recovery";
 
